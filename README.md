@@ -1,5 +1,5 @@
 # ChatManagerWebhook
-🐍Python webhook for [Chat-Manager]<https://vk.com/cm>
+🐍Python webhook for [Chat-Manager]<https://vk.com/cm>.
 
 ## Сначала прочитайте эту статью: https://vk.com/@chatmanage-callback-api.
 
