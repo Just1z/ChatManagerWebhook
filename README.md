@@ -3,7 +3,7 @@
 
 ## Сначала прочитайте эту статью: https://vk.com/@chatmanage-callback-api.
 
-Зарегистрируйтесь на (PythonAnywhere)<pythonanywhere.com> и создайте приложение на **Flask** с версией Python 3.7. Во вкладке Consoles с помощью pip установите библиотеку vk_api. Откройте Bash и напишите команду pip install —user vk-api. Далее в /mysite нужно удалить все файлы и загрузите файлы flask_app.py и settings.py.
+Зарегистрируйтесь на (PythonAnywhere)(pythonanywhere.com) и создайте приложение на **Flask** с версией Python 3.7. Во вкладке Consoles с помощью pip установите библиотеку vk_api. Откройте Bash и напишите команду pip install —user vk-api. Далее в /mysite нужно удалить все файлы и загрузите файлы flask_app.py и settings.py.
 ![alt text](example/Files.png) 
 После этого перезагрузите приложение. Ваш сервер готов. 
 Теперь можно настроить вебхук по статье. 
