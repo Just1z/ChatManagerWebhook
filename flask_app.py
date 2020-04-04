@@ -8,11 +8,11 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 from flask import Flask, request, json
 from hashlib import md5
 
-settings1 = {'token': '...', # Токен от API Чат-Менеджера
+settings = {'token': '...', # Токен от API Чат-Менеджера
             'id': 1, # ID вашей страницы ВК
             'access_token': '...'} # Токен от API VK, который вы должны получить самостоятельно по ссылке https://vk.com/away.php?to=https%3A%2F%2Fvk.cc%2F96T6nM
 
-chats1 = {'ABC': 1, 'CBA': 2} # Слева - UID чатов у Чат-Менеджера, справа - ID чата у вас
+chats = {'ABC': 1, 'CBA': 2} # Слева - UID чатов у Чат-Менеджера, справа - ID чата у вас
 # Поменяйте все данные на свои
 
 vk_session = vk_api.VkApi(token=settings["access_token"], api_version=5.100) 
