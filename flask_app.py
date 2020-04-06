@@ -12,8 +12,8 @@ settings = {'token': '...', # Токен от API Чат-Менеджера
             'id': 1, # ID вашей страницы ВК
             'access_token': '...'} # Токен от API VK, который вы должны получить самостоятельно по ссылке https://vk.com/away.php?to=https%3A%2F%2Fvk.cc%2F96T6nM
 
-chats = {'ABC': 1, 'CBA': 2} # Слева - UID чатов у Чат-Менеджера, справа - ID чата у вас
-# Поменяйте все данные на свои
+chats = {'AcDcaD': 127, 'CabDab': 144} # Слева - UID чатов у Чат-Менеджера, справа - ID чата у вас
+# Поменяйте все данные на свои, т.к. это просто пример!
 
 vk_session = vk_api.VkApi(token=settings["access_token"], api_version=5.100) 
 vk = vk_session.get_api() # Вызываем VK API
