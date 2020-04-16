@@ -80,8 +80,9 @@ def processing():
             msg = data['data']['conversation_message_id'] # ID сообщения в беседе
             try:
                 if chat in chats.values():
-                    msgid = vk.messages.getByConversationMessageId(peer_id=2000000000+int(chat), conversation_message_ids=msg)["items"][0]["id"] # ID сообщения
-                    vk.messages.pin(peer_id=2000000000+int(chat), message_id=int(msgid)) # Закрепляем
+                    vk.execute(code="""var peer_id = %s + 2000000000;var msg = %s;
+var msgid = API.messages.getByConversationMessageId({"peer_id":peer_id,"conversation_message_ids":msg}).items@.id;
+return API.messages.pin({"peer_id":peer_id, "message_id":msgid});""" % (chat, msg))
                     return 'ok'
                 else:
                     return '0'
