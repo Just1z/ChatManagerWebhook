@@ -46,8 +46,9 @@ def processing():
             user = data["data"]['user'] # ID пользователя, которого нужно пригласить или у которого прошёл бан
             # Если пользователь в друзьях вебхука и вы настроили ID чата в settings
             try:
-                if chat in chats.values() and int(vk.friends.areFriends(user_ids=int(user))[0]["friend_status"]) == 3:
-                    vk.messages.addChatUser(chat_id=int(chat), user_id=int(user)) # Приглашаем пользователя
+                if chat in chats.values():
+                    vk.execute(code='''var chat = %s;var user = %s;
+if (API.friends.areFriends({"user_ids":user})[0].friend_status == 3){return API.messages.addChatUser({"chat_id": chat, "user_id": user});}''' % (chat, user))
                     return 'ok'
                 else:
                     return '0'
@@ -80,9 +81,9 @@ def processing():
             msg = data['data']['conversation_message_id'] # ID сообщения в беседе
             try:
                 if chat in chats.values():
-                    vk.execute(code="""var peer_id = %s + 2000000000;var msg = %s;
+                    vk.execute(code='''var peer_id = %s + 2000000000;var msg = %s;
 var msgid = API.messages.getByConversationMessageId({"peer_id":peer_id,"conversation_message_ids":msg}).items@.id;
-return API.messages.pin({"peer_id":peer_id, "message_id":msgid});""" % (chat, msg))
+return API.messages.pin({"peer_id":peer_id, "message_id":msgid});''' % (chat, msg))
                     return 'ok'
                 else:
                     return '0'
