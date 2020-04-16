@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 import vk_api # Библиотека для работы с VK API
 import base64 # Нужно для photo_upload
-import hashlib # Нужно для первого запроса
 import urllib.request
 import requests
-from vk_api.longpoll import VkLongPoll, VkEventType
 from flask import Flask, request, json
-from hashlib import md5
+from hashlib import md5 # Нужно для первого запроса
 
 settings = {'token': '...', # Токен от API Чат-Менеджера
             'id': 1, # ID вашей страницы ВК
