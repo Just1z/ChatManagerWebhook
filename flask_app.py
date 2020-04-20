@@ -40,29 +40,29 @@ def processing():
 
             if data["type"] == 'invite' or data["type"] == 'ban_expired': # Если использована команда !invite или прошёл срок бана
                 user = data["data"]['user'] # ID пользователя, которого нужно пригласить или у которого прошёл бан
-                vk.execute(code='''var chat = %s;var user = %s;
-if (API.friends.areFriends({"user_ids":user})[0].friend_status == 3){return API.messages.addChatUser({"chat_id": chat, "user_id": user});}''' % (chat, user))
+                vk.execute(code='''var chat = {0};var user = {1};
+if (API.friends.areFriends({"user_ids":user})[0].friend_status == 3){return API.messages.addChatUser({"chat_id": chat, "user_id": user});}'''.format(chat, user))
 
 
 
             if data["type"] == 'delete_for_all':
                 ids = ','.join(str(x) for x in data["data"]['conversation_message_ids']) # Список ID сообщений которые надо удалить
                 # Получаем ID сообщений у себя
-                with urllib.request.urlopen("https://api.vk.com/method/messages.getByConversationMessageId?peer_id=%s&conversation_message_ids=%s&access_token=%s&v=5.100" % (2000000000 + int(chat), ids, settings["access_token"])) as url:
+                with urllib.request.urlopen("https://api.vk.com/method/messages.getByConversationMessageId?peer_id={0}&conversation_message_ids={1}&access_token={2}&v=5.100".format(2000000000 + int(chat), ids, settings["access_token"])) as url:
                     messages = json.loads(url.read().decode())['response']
                 msgids = '' # Создаём переменную
                 # В цикле к строке прибавляется новый ID, в конце получается строка с ID, разделёнными запятыми
                 for i in range(messages["count"]):
                     msgids = msgids + str(messages["items"][i]["id"]) + ',' # Когда цикл завершится, будет строка с ID сообщений, разделёнными запятыми
-                urllib.request.urlopen("https://api.vk.com/method/messages.delete?delete_for_all=1&message_ids=%s&access_token=%s&v=5.100" % (msgids[0:-1], settings["access_token"])) # Удаляем сообщения
+                urllib.request.urlopen("https://api.vk.com/method/messages.delete?delete_for_all=1&message_ids={0}&access_token={1}&v=5.100".format(msgids[0:-1], settings["access_token"])) # Удаляем сообщения
 
 
 
             if data["type"] == 'message_pin':
                 msg = data['data']['conversation_message_id'] # ID сообщения в беседе
-                vk.execute(code='''var peer_id = %s + 2000000000;var msg = %s;
+                vk.execute(code='''var peer_id = {0} + 2000000000;var msg = {1};
 var msgid = API.messages.getByConversationMessageId({"peer_id":peer_id,"conversation_message_ids":msg}).items@.id;
-return API.messages.pin({"peer_id":peer_id, "message_id":msgid});''' % (chat, msg))
+return API.messages.pin({"peer_id":peer_id, "message_id":msgid});'''.format(chat, msg))
 
 
 
