@@ -40,8 +40,8 @@ def processing():
 
             if data["type"] == 'invite' or data["type"] == 'ban_expired': # Если использована команда !invite или прошёл срок бана
                 user = data["data"]['user'] # ID пользователя, которого нужно пригласить или у которого прошёл бан
-                vk.execute(code='''var chat = {0};var user = {1};
-if (API.friends.areFriends({"user_ids":user})[0].friend_status == 3){return API.messages.addChatUser({"chat_id": chat, "user_id": user});}'''.format(chat, user))
+                friend_check = 'if (API.friends.areFriends({"user_ids": user})[0].friend_status == 3){return API.messages.addChatUser({"chat_id": chat, "user_id": user});}'
+                vk.execute(code=f'var chat = {chat};var user = {user};{friend_check}')
 
 
 
@@ -60,9 +60,8 @@ if (API.friends.areFriends({"user_ids":user})[0].friend_status == 3){return API.
 
             if data["type"] == 'message_pin':
                 msg = data['data']['conversation_message_id'] # ID сообщения в беседе
-                vk.execute(code='''var peer_id = {0} + 2000000000;var msg = {1};
-var msgid = API.messages.getByConversationMessageId({"peer_id":peer_id,"conversation_message_ids":msg}).items@.id;
-return API.messages.pin({"peer_id":peer_id, "message_id":msgid});'''.format(chat, msg))
+                pin = 'var msgid = API.messages.getByConversationMessageId({"peer_id":peer_id,"conversation_message_ids":msg}).items@.id;return API.messages.pin({"peer_id":peer_id, "message_id":msgid});'
+                vk.execute(code=f'var peer_id = {chat} + 2000000000;var msg = {msg};{pin}')
 
 
 
