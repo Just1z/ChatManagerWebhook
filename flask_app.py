@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import vk_api # Библиотека для работы с VK API
 import base64 # Нужно для photo_upload
 import urllib.request
 import requests
@@ -10,17 +9,16 @@ settings = {'token': '...', # Токен от API Чат-Менеджера
             'id': 1, # ID вашей страницы ВК
             'access_token': '...'} # Токен от API VK, который вы должны получить самостоятельно по ссылке https://vk.com/away.php?to=https%3A%2F%2Fvk.cc%2F96T6nM
 
-chats = {'AcDcaD': 127, 'CabDab': 144} # Список ваших чатов. Строка слева - UID. Число справа - id чата на вашей странице.
+chats = {'AAA': 111, 'BBB': 222} # Список ваших чатов. Строка слева - UID. Число справа - id чата на вашей странице.
 # Поменяйте все данные на свои, т.к. это просто пример!
 
-vk_session = vk_api.VkApi(token=settings["access_token"], api_version=5.100) 
-vk = vk_session.get_api() # Вызываем VK API
+token = settings["access_token"]
 
 app = Flask(__name__)
 # Получаем Callback запрос
 @app.route('/', methods=['POST'])
 def processing():
-    try: 
+    try:
         data = json.loads(request.data) # Декодируем Callback запрос
         if not data: # Если запрос пустой
             return "Пустой запрос!"
@@ -41,7 +39,7 @@ def processing():
             if data["type"] == 'invite' or data["type"] == 'ban_expired': # Если использована команда !invite или прошёл срок бана
                 user = data["data"]['user'] # ID пользователя, которого нужно пригласить или у которого прошёл бан
                 friend_check = 'if (API.friends.areFriends({"user_ids": user})[0].friend_status == 3){return API.messages.addChatUser({"chat_id": chat, "user_id": user});}'
-                vk.execute(code=f'var chat = {chat};var user = {user};{friend_check}')
+                requests.get('https://api.vk.com/method/execute', params={"code": f"var chat = {chat};var user = {user};{friend_check}", "access_token": token, "v": 5.100})
 
 
 
@@ -61,13 +59,13 @@ def processing():
             if data["type"] == 'message_pin':
                 msg = data['data']['conversation_message_id'] # ID сообщения в беседе
                 pin = 'var msgid = API.messages.getByConversationMessageId({"peer_id":peer_id,"conversation_message_ids":msg}).items@.id;return API.messages.pin({"peer_id":peer_id, "message_id":msgid});'
-                vk.execute(code=f'var peer_id = {chat} + 2000000000;var msg = {msg};{pin}')
+                requests.get('https://api.vk.com/method/execute', params={"code": f"var peer_id = {chat} + 2000000000;var msg = {msg};{pin}", "access_token": token, "v": 5.100})
 
 
 
             if data["type"] == 'photo_update':
                 photo = data['data']['photo'] # Закодированное в base64 изображение беседы
-                upload_url = vk.photos.getChatUploadServer(chat_id=chat)['upload_url'] # Получаем URL сервера для загрузки фото
+                upload_url = urllib.request.urlopen(f"https://api.vk.com/method/photos.getChatUploadServer?chat_id={chat}&access_token={token}&v=5.100")['upload_url'] # Получаем URL сервера для загрузки фото
                 with open("photo.png", "wb") as file:
                     file.write(base64.b64decode(photo)) # Декодируем base64 и создаём саму картинку
                     file.close() 
@@ -75,11 +73,10 @@ def processing():
                 r = requests.post(upload_url, files={'file': ('photo.png', open("photo.png", 'rb'))}) # Загружаём её на сервер
                 with urllib.request.urlopen(upload_url) as server_url:
                     f = json.loads(r.text)['response'] # Получаем строку для ответа в setChatPhoto
-                    vk.messages.setChatPhoto(file=f) # Изменяем изображение беседы
+                    urllib.request.urlopen(f"https://api.vk.com/method/messages.setChatPhoto?file={f}&access_token={token}&v=5.100")
                     server_url.close()
                 image.close()
 
             return 'ok'
-
     except:
         return '0'
