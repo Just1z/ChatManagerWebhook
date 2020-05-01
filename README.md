@@ -1,7 +1,7 @@
 # ChatManagerWebhook
 🐍Python webhook for [Чат-Менеджер](https://vk.com/cm).
 
-## Сначала прочитайте эту статью: https://vk.com/@chatmanage-callback-api.
+## Сначала прочитайте эту статью: https://vk.com/@cm-callback-api.
 
 Зарегистрируйтесь на [PythonAnywhere](pythonanywhere.com) и создайте приложение на **Flask** с версией Python 3.7
 ![alt text](example/image2.png) 
