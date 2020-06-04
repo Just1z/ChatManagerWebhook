@@ -39,7 +39,8 @@ def processing():
             if data["type"] == 'invite' or data["type"] == 'ban_expired': # Если использована команда !invite или прошёл срок бана
                 user = data["data"]['user'] # ID пользователя, которого нужно пригласить или у которого прошёл бан
                 friend_check = 'if (API.friends.areFriends({"user_ids": user})[0].friend_status == 3){return API.messages.addChatUser({"chat_id": chat, "user_id": user});}'
-                requests.get('https://api.vk.com/method/execute', params={"code": f"var chat = {chat};var user = {user};{friend_check}", "access_token": token, "v": 5.100})
+                code = f"var chat = {chat};var user = {user};{friend_check}"
+                requests.post('https://api.vk.com/method/execute', params={"code": code, "access_token": token, "v": 5.103})
 
 
 
@@ -52,14 +53,15 @@ def processing():
                 # В цикле к строке прибавляется новый ID, в конце получается строка с ID, разделёнными запятыми
                 for i in range(messages["count"]):
                     msgids = msgids + str(messages["items"][i]["id"]) + ',' # Когда цикл завершится, будет строка с ID сообщений, разделёнными запятыми
-                urllib.request.urlopen("https://api.vk.com/method/messages.delete?delete_for_all=1&message_ids={0}&access_token={1}&v=5.100".format(msgids[0:-1], settings["access_token"])) # Удаляем сообщения
+                urllib.request.urlopen(f"https://api.vk.com/method/messages.delete?delete_for_all=1&message_ids={msgids[0:-1]}&access_token={token}&v=5.100") # Удаляем сообщения
 
 
 
             if data["type"] == 'message_pin':
                 msg = data['data']['conversation_message_id'] # ID сообщения в беседе
                 pin = 'var msgid = API.messages.getByConversationMessageId({"peer_id":peer_id,"conversation_message_ids":msg}).items@.id;return API.messages.pin({"peer_id":peer_id, "message_id":msgid});'
-                requests.get('https://api.vk.com/method/execute', params={"code": f"var peer_id = {chat} + 2000000000;var msg = {msg};{pin}", "access_token": token, "v": 5.100})
+                code = f'var peer_id = {chat} + 2000000000;var msg = "{msg}";{pin}'
+                requests.post('https://api.vk.com/method/execute', params={"code": code, "access_token": token, "v": 5.103})
 
 
 
