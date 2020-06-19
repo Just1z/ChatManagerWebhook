@@ -45,9 +45,10 @@ def processing():
 
 
             if data["type"] == 'delete_for_all':
+                peer_id = 2000000000 + chat
                 ids = ','.join(str(x) for x in data["data"]['conversation_message_ids']) # Список ID сообщений которые надо удалить
                 # Получаем ID сообщений у себя
-                with urllib.request.urlopen("https://api.vk.com/method/messages.getByConversationMessageId?peer_id={0}&conversation_message_ids={1}&access_token={2}&v=5.100".format(2000000000 + int(chat), ids, settings["access_token"])) as url:
+                with urllib.request.urlopen(f"https://api.vk.com/method/messages.getByConversationMessageId?peer_id={peer_id}&conversation_message_ids={ids}&access_token={token}&v=5.100") as url:
                     messages = json.loads(url.read().decode())['response']
                 msgids = '' # Создаём переменную
                 # В цикле к строке прибавляется новый ID, в конце получается строка с ID, разделёнными запятыми
@@ -58,9 +59,10 @@ def processing():
 
 
             if data["type"] == 'message_pin':
+                peer_id = 2000000000 + chat
                 msg = data['data']['conversation_message_id'] # ID сообщения в беседе
                 pin = 'var msgid = API.messages.getByConversationMessageId({"peer_id":peer_id,"conversation_message_ids":msg}).items@.id;return API.messages.pin({"peer_id":peer_id, "message_id":msgid});'
-                code = f'var peer_id = {chat} + 2000000000;var msg = "{msg}";{pin}'
+                code = f'var peer_id = {peer_id};var msg = "{msg}";{pin}'
                 requests.post('https://api.vk.com/method/execute', params={"code": code, "access_token": token, "v": 5.103})
 
 
