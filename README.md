@@ -35,7 +35,7 @@ chats = {'AAA': 111, 'BBB': 222}
 
 
 # Установка
-Зарегистрируйтесь на [PythonAnywhere](pythonanywhere.com) и создайте приложение на **Flask** с версией Python 3.7
+### Зарегистрируйтесь на [PythonAnywhere](pythonanywhere.com) и создайте приложение на **Flask** с версией Python 3.7
 ![alt text](example/image2.png) 
 ### Далее в /mysite будет файл flask_app.py. В репозитории он называется так же. Вы можете скопировать код с репозитория и вставить его в файл flask_app.py Должно получиться так:
 ![alt text](example/image.png) 
@@ -45,5 +45,5 @@ https://api.chatmanager.pro/?method=account.setWebHook&token=TOKEN&url=https://N
 
 # Обратная связь
 Можете писать в [ВК](https://vk.com/just1nwtf).  
-Не пишите тупых вопросов, здесь я объяснил максимум что смог.
+Не пишите тупых вопросов, здесь я объяснил максимум что смог.  
 Вы всегда можете установить [готовый вебхук](https://vk.com/yoda505), если у вас что-то не получается.
