@@ -44,6 +44,6 @@ https://api.chatmanager.pro/?method=account.setWebHook&token=TOKEN&url=https://N
 Вместо TOKEN ставите токен от API Чат-менеджера, который мы получили выше. Вместо NICKNAME ставите свой ник на PythonAnywhere. 
 
 # Обратная связь
-Можете писать в [ВК](https://vk.com/just1nwtf).  
+Можете писать в [ВК](https://vk.com/just1z).  
 Не пишите тупых вопросов, здесь я объяснил максимум что смог.  
 Вы всегда можете установить [готовый вебхук](https://vk.com/yoda5), если у вас что-то не получается.
