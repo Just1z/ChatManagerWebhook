@@ -45,8 +45,6 @@ def processing():
                             "access_token": TOKEN,
                             "v": 5.103},
                     timeout=60).json()['response']
-                msgids = ''
-                # В цикле к строке прибавляется новый ID, в конце получается строка со списком ID
                 msgids = ",".join(i["id"] for i in messages["items"])
                 requests.post(
                     "https://api.vk.com/method/messages.delete",
