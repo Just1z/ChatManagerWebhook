@@ -29,10 +29,9 @@ def processing():
                 code = f'var chat = {chat};var user = {user};' + 'if (API.friends.areFriends({"user_ids": user})[0].friend_status == 3){return API.messages.addChatUser({"chat_id": chat, "user_id": user});}'
                 requests.post(
                     'https://api.vk.com/method/execute',
-                    params={
-                        "code": code, 
-                        "access_token": TOKEN, 
-                        "v": 5.103},
+                    params={"code": code,
+                            "access_token": TOKEN, 
+                            "v": 5.103},
                     timeout=60)
 
             if data["type"] == 'delete_for_all':
@@ -41,24 +40,20 @@ def processing():
                 # Получаем ID сообщений у себя
                 messages = requests.post(
                     "https://api.vk.com/method/messages.getByConversationMessageId",
-                    params={
-                        "peer_id": 2000000000 + chat,
-                        "conversation_message_ids": ids,
-                        "access_token": TOKEN,
-                        "v": 5.103},
-                    timeout=60
-                    ).json()['response']
+                    params={"peer_id": 2000000000 + chat,
+                            "conversation_message_ids": ids,
+                            "access_token": TOKEN,
+                            "v": 5.103},
+                    timeout=60).json()['response']
                 msgids = ''
                 # В цикле к строке прибавляется новый ID, в конце получается строка со списком ID
-                for i in range(messages["count"]):
-                    msgids = msgids + str(messages["items"][i]["id"]) + ','
+                msgids = ",".join(i["id"] for i in messages["items"])
                 requests.post(
                     "https://api.vk.com/method/messages.delete",
-                    params={
-                        "delete_for_all": 1,
-                        "message_ids": msgids[:-1],
-                        "access_token": TOKEN,
-                        "v": 5.103},
+                    params={"delete_for_all": 1,
+                            "message_ids": msgids,
+                            "access_token": TOKEN,
+                            "v": 5.103},
                     timeout=60) # Удаляем сообщения
 
             if data["type"] == 'message_pin':
@@ -66,24 +61,20 @@ def processing():
                 code = f'var peer_id = {chat} + 2000000000;var msg = "{msg}";' + 'var msgid = API.messages.getByConversationMessageId({"peer_id":peer_id,"conversation_message_ids":msg}).items@.id;return API.messages.pin({"peer_id":peer_id, "message_id":msgid});'
                 requests.post(
                     'https://api.vk.com/method/execute',
-                    params={
-                        "code": code,
-                        "access_token": TOKEN,
-                        "v": 5.103},
-                    timeout=60
-                    )
+                    params={"code": code,
+                            "access_token": TOKEN,
+                            "v": 5.103},
+                    timeout=60)
 
             if data["type"] == 'photo_update':
                 photo = data['data']['photo'] # Закодированное в base64 изображение беседы
                 # Получаем URL сервера для загрузки фото
                 upload_url = requests.get(
                     "https://api.vk.com/method/photos.getChatUploadServer",
-                    params={
-                        "chat_id": chat,
-                        "access_token": TOKEN,
-                        "v": 5.103},
+                    params={"chat_id": chat,
+                            "access_token": TOKEN,
+                            "v": 5.103},
                     timeout=60).json()['response']['upload_url']
-                print(upload_url)
                 with open("photo.png", "wb") as file:
                     file.write(base64.b64decode(photo)) # Декодируем base64 и создаём саму картинку
                     file.close()
@@ -97,13 +88,10 @@ def processing():
                     timeout=60).json()['response']
                 requests.post(
                     "https://api.vk.com/method/messages.setChatPhoto",
-                    params={
-                        "file": f,
-                        "access_token": TOKEN,
-                        "v": 5.103
-                        },
-                    timeout=60
-                    )
+                    params={"file": f,
+                            "access_token": TOKEN,
+                            "v": 5.103},
+                    timeout=60)
                 image.close()
             return 'ok'
     except:
