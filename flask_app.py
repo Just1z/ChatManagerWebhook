@@ -28,7 +28,7 @@ def processing():
                 user = data["data"]['user'] # ID пользователя, которого нужно пригласить в чат
                 code = f'var chat = {chat};var user = {user};' + 'if (API.friends.areFriends({"user_ids": user})[0].friend_status == 3){return API.messages.addChatUser({"chat_id": chat, "user_id": user});}'
                 requests.post(
-                    'https://api.vk.com/method/execute',
+                    'https://api.vk.ru/method/execute',
                     params={"code": code,
                             "access_token": TOKEN, 
                             "v": 5.103},
@@ -39,7 +39,7 @@ def processing():
                 ids = ','.join(str(x) for x in data["data"]['conversation_message_ids'])
                 # Получаем ID сообщений у себя
                 messages = requests.post(
-                    "https://api.vk.com/method/messages.getByConversationMessageId",
+                    "https://api.vk.ru/method/messages.getByConversationMessageId",
                     params={"peer_id": 2000000000 + chat,
                             "conversation_message_ids": ids,
                             "access_token": TOKEN,
@@ -47,7 +47,7 @@ def processing():
                     timeout=60).json()['response']
                 msgids = ",".join(i["id"] for i in messages["items"])
                 requests.post(
-                    "https://api.vk.com/method/messages.delete",
+                    "https://api.vk.ru/method/messages.delete",
                     params={"delete_for_all": 1,
                             "message_ids": msgids,
                             "access_token": TOKEN,
@@ -58,7 +58,7 @@ def processing():
                 msg = data['data']['conversation_message_id'] # ID сообщения в беседе
                 code = f'var peer_id = {chat} + 2000000000;var msg = "{msg}";' + 'var msgid = API.messages.getByConversationMessageId({"peer_id":peer_id,"conversation_message_ids":msg}).items@.id;return API.messages.pin({"peer_id":peer_id, "message_id":msgid});'
                 requests.post(
-                    'https://api.vk.com/method/execute',
+                    'https://api.vk.ru/method/execute',
                     params={"code": code,
                             "access_token": TOKEN,
                             "v": 5.103},
@@ -68,7 +68,7 @@ def processing():
                 photo = data['data']['photo'] # Закодированное в base64 изображение беседы
                 # Получаем URL сервера для загрузки фото
                 upload_url = requests.get(
-                    "https://api.vk.com/method/photos.getChatUploadServer",
+                    "https://api.vk.ru/method/photos.getChatUploadServer",
                     params={"chat_id": chat,
                             "access_token": TOKEN,
                             "v": 5.103},
@@ -85,7 +85,7 @@ def processing():
                         },
                     timeout=60).json()['response']
                 requests.post(
-                    "https://api.vk.com/method/messages.setChatPhoto",
+                    "https://api.vk.ru/method/messages.setChatPhoto",
                     params={"file": f,
                             "access_token": TOKEN,
                             "v": 5.103},
@@ -94,3 +94,4 @@ def processing():
             return 'ok'
     except:
         return '0'
+
